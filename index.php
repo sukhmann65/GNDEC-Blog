@@ -1,226 +1,85 @@
 <?php
-ob_start();
-session_start();
-include_once("connection.php");
-if($_SESSION['admin'] || $_SESSION['student'] || $_SESSION['teacher'])
-{
+/**
+ * @link: http://www.Awcore.com/dev
+ */
+    //connect to the database
+    include_once ('db.php'); 
+    //get the function
+    include_once ('function.php');
+
+    	$page = (int) (!isset($_GET["page"]) ? 1 : $_GET["page"] &u);
+    	$limit = 9;
+    	$startpoint = ($page * $limit) - $limit;
+        
+        //to make pagination
+        $statement = "`tb_product` where `pd_status` = 1 and `pd_catid` = $cat_id and `pd_subid` = $sub_id";
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
-<?php
-include_once("head.php");
-?>
-
-
-
+    <title>Pagination</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link href="css/pagination.css" rel="stylesheet" type="text/css" />
+	<link href="css/B_blue.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .records {
+            width: 510px;
+            margin: 5px;
+            padding:2px 5px;
+            border:1px solid #B6B6B6;
+        }
+        
+        .record {
+            color: #474747;
+            margin: 5px 0;
+            padding: 3px 5px;
+        	background:#E6E6E6;  
+            border: 1px solid #B6B6B6;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+        .record:hover {
+            background:#D3D2D2;
+        }
+        
+        
+        .round {
+        	-moz-border-radius:8px;
+        	-khtml-border-radius: 8px;
+        	-webkit-border-radius: 8px;
+        	border-radius:8px;    
+        }    
+        
+        p.createdBy{
+            padding:5px;
+            width: 510px;
+        	font-size:15px;
+        	text-align:center;
+        }
+        p.createdBy a {color: #666666;text-decoration: none;}        
+    </style>    
 </head>
+
 <body>
 
-<div id="cl-wrapper">
-<?php include_once("sidebar.php");?>
-	<div class="container-fluid" id="pcont">
-   
-   <?php 
-   include_once("header.php");
-   if($_REQUEST['k1']=="dashboard")
-   {
-	   include_once("dashboard.php");
-   }
-   elseif($_REQUEST['k1']=="queries")
-   {
-	   include_once("form/queries.php");
-   }
-   elseif($_REQUEST['k1']=="view_msg")
-   {
-	   include_once("form/view_msg.php");
-   }
-   elseif($_REQUEST['k1']=="query_reply")
-   {
-	   include_once("form/query_reply.php");
-   }
-   elseif($_REQUEST['k1']=="reg_stu")
-   {
-	   include_once("form/reg_stu.php");
-   }
-   elseif($_REQUEST['k1']=="stu_verified")
-   {
-	   include_once("form/stu_verified.php");
-   }
-   elseif($_REQUEST['k1']=="guide_std")
-   {
-	   include_once("form/guide_std.php");
-   }
-   elseif($_REQUEST['k1']=="view_std")
-   {
-	   include_once("form/view_std.php");
-   }
-   elseif($_REQUEST['k1']=="training")
-   {
-	   include_once("form/training.php");
-   }
-   elseif($_REQUEST['k1']=="company")
-   {
-	   include_once("form/company.php");
-   }
-   else if($_REQUEST['k1']=="course")
-   {
-	   include_once("form/course.php");
-   }
-   else if($_REQUEST['k1']=="batch")
-   {
-	   include_once("form/batch.php");
-   }
-   else if($_REQUEST['k1']=="guide")
-   {
-	   include_once("form/guide.php");
-   }
-   else if($_REQUEST['k1']=="guidedetail")
-   {
-	   include_once("form/guidedetail.php");
-   }
-   else if($_REQUEST['k1']=="students")
-   {
-	   include_once("form/students.php");
-   }
-   else if($_REQUEST['k1']=="placed_std")
-   {
-	   include_once("form/placed_std.php");
-   }
- /*  else if($_REQUEST['k1']=="std")
-   {
-	   include_once("form/std.php");
-   } */
-   else if($_REQUEST['k1']=="news")
-   {
-	   include_once("form/news.php");
-   }
-   else if($_REQUEST['k1']=="stureg")
-   {
-	   include_once("user forms/sturegistration.php");
-   }
-   else if($_REQUEST['k1']=="details")
-   {
-	   include_once("user forms/details.php");
-   }
-   else if($_REQUEST['k1']=="change_pwd")
-   {
-	   include_once("user forms/change_pwd.php");
-   }
-   else if($_REQUEST['k1']=="projdetails")
-   {
-	   include_once("user forms/projdetails.php");
-   }
-   else if($_REQUEST['k1']=="blog")
-   {
-	   include_once("user forms/blog.php");
-   }
-   else if($_REQUEST['k1']=="oldrecord")
-   {
-	   include_once("user forms/oldrecord.php");
-   }
-   else if($_REQUEST['k1']=="record")
-   {
-	   include_once("user forms/record.php");
-   }
-   else if($_REQUEST['k1']=="view_blog")
-   {
-	   include_once("user forms/view_blog.php");
-   }
-   else if($_REQUEST['k1']=="v_blog")
-   {
-	   include_once("user forms/v_blog.php");
-   }
-   else if($_REQUEST['k1']=="view_blog1")
-   {
-	   include_once("user forms/v_blog.php");
-   }
-   else if($_REQUEST['k1']=="nps")
-   {
-	   include_once("user forms/news_std.php");
-   }
-   elseif($_REQUEST['k1']=="read_news")
-   {
-	   include_once("user forms/read_news.php");
-   }
-   else if($_REQUEST['k1']=="synopsis")
-   {
-	   include_once("user forms/synopsis.php");
-   }
-   else if($_REQUEST['k1']=="code")
-   {
-	   include_once("user forms/code.php");
-   }
-   else if($_REQUEST['k1']=="rating")
-   {
-	   include_once("user forms/rating.php");
-   }
-   else if($_REQUEST['k1']=="compny_feedback")
-   {
-	   include_once("compny_feedback.php");
-   }
-   else if($_REQUEST['k1']=="stdrecord")
-   {
-	   include_once("guide_forms/stdrecord.php");
-   }
-   else if($_REQUEST['k1']=="g_synopsis")
-   {
-	   include_once("guide_forms/g_synopsis.php");
-   }
-   else if($_REQUEST['k1']=="syn_record")
-   {
-	   include_once("guide_forms/synopsis_record.php");
-   }
-   else if($_REQUEST['k1']=="trn_type")
-   {
-	   include_once("user forms/std_trn.php");
-   }
-   else if($_REQUEST['k1']=="stdinfo")
-   {
-	   include_once("guide_forms/stdinfo.php");
-   }
-   else if($_REQUEST['k1']=="viewblog")
-   {
-	  include_once("guide_forms/viewblog.php");
-   }
-   else if($_REQUEST['k1']=="list_std")
-   {
-	   include_once("guide_forms/list_std.php");
-   }
-   else if($_REQUEST['k1']=="view_list")
-   {
-	   include_once("guide_forms/view_list.php");
-   }
-   else if($_REQUEST['k1']=="projects")
-   {
-	   include_once("guide_forms/projects.php");
-   }
-   else if($_REQUEST['k1']=="view_proj")
-   {
-	   include_once("guide_forms/view_proj.php");
-   }
-   else
-   {
-	   include_once("dashboard.php");
-   }
-   
-   ?>   
-	
-    
+    <div class="records round">
+        <?php
+            //show records
+            $query = mysql_query("SELECT * FROM {$statement} LIMIT {$startpoint} , {$limit}");
+            
+        	while ($row = mysql_fetch_assoc($query)) {
+				 $path="../pro_admin/images/".$row['pd_img'];
+				
+        ?>
+            <div class="record round"><img src="<?php echo $path; ?>" height="50px" width="50px" /></div>
+        <?php    
+            }
+        ?>
     </div>
-</div>
 
 <?php
-include_once("scripts.php");
+	echo pagination($statement,$limit,$page);
 ?>
-
-<?php
-}
-else
-{
-	header("location:login.php");
-}
-?>
-
 </body>
 </html>
